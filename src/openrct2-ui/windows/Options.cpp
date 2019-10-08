@@ -194,7 +194,8 @@ enum WINDOW_OPTIONS_WIDGET_IDX {
     WIDX_FOLLOWER_PEEP_TRACKING_CHECKBOX,
     WIDX_CHAT_PEEP_NAMES_CHECKBOX,
     WIDX_CHAT_PEEP_TRACKING_CHECKBOX,
-    WIDX_NEWS_CHECKBOX
+    WIDX_NEWS_CHECKBOX,
+    WIDX_EXPORTING_PARK_INFO_CHECKBOX
 };
 
 #define WW          310
@@ -375,13 +376,14 @@ static rct_widget window_options_advanced_widgets[] = {
 
 static rct_widget window_options_twitch_widgets[] = {
     MAIN_OPTIONS_WIDGETS,
-    { WWT_BUTTON,           1,  10,     299,    54,     66,     STR_TWITCH_NAME,            STR_TWITCH_NAME_TIP },              // Twitch channel name
-    { WWT_BUTTON,           1,  10,     299,    71,     83,     STR_TWITCH_API_URL,         STR_TWITCH_API_URL_TIP },           // Twitch API name
-    { WWT_CHECKBOX,         2,  10,     299,    88,     103,    STR_TWITCH_PEEP_FOLLOWERS,  STR_TWITCH_PEEP_FOLLOWERS_TIP },    // Twitch name peeps by follows
-    { WWT_CHECKBOX,         2,  10,     299,    104,    119,    STR_TWITCH_FOLLOWERS_TRACK, STR_TWITCH_FOLLOWERS_TRACK_TIP },   // Twitch information on for follows
-    { WWT_CHECKBOX,         2,  10,     299,    120,    135,    STR_TWITCH_PEEP_CHAT,       STR_TWITCH_PEEP_CHAT_TIP },         // Twitch name peeps by chat
-    { WWT_CHECKBOX,         2,  10,     299,    136,    151,    STR_TWITCH_CHAT_TRACK,      STR_TWITCH_CHAT_TRACK_TIP  },       // Twitch information on for chat
-    { WWT_CHECKBOX,         2,  10,     299,    152,    167,    STR_TWITCH_CHAT_NEWS,       STR_TWITCH_CHAT_NEWS_TIP },         // Twitch chat !news as notifications in game
+    { WWT_BUTTON,           1,  10,     299,    54,     66,     STR_TWITCH_NAME,                      STR_TWITCH_NAME_TIP },                        // Twitch channel name
+    { WWT_BUTTON,           1,  10,     299,    71,     83,     STR_TWITCH_API_URL,                   STR_TWITCH_API_URL_TIP },                     // Twitch API name
+    { WWT_CHECKBOX,         2,  10,     299,    88,     103,    STR_TWITCH_PEEP_FOLLOWERS,            STR_TWITCH_PEEP_FOLLOWERS_TIP },              // Twitch name peeps by follows
+    { WWT_CHECKBOX,         2,  10,     299,    104,    119,    STR_TWITCH_FOLLOWERS_TRACK,           STR_TWITCH_FOLLOWERS_TRACK_TIP },             // Twitch information on for follows
+    { WWT_CHECKBOX,         2,  10,     299,    120,    135,    STR_TWITCH_PEEP_CHAT,                 STR_TWITCH_PEEP_CHAT_TIP },                   // Twitch name peeps by chat
+    { WWT_CHECKBOX,         2,  10,     299,    136,    151,    STR_TWITCH_CHAT_TRACK,                STR_TWITCH_CHAT_TRACK_TIP  },                 // Twitch information on for chat
+    { WWT_CHECKBOX,         2,  10,     299,    152,    167,    STR_TWITCH_CHAT_NEWS,                 STR_TWITCH_CHAT_NEWS_TIP },                   // Twitch chat !news as notifications in game
+    { WWT_CHECKBOX,         2,  10,     299,    168,    183,    STR_TWITCH_EXPORTING_PARK_INFO,       STR_TWITCH_EXPORTING_PARK_INFO_TIP },         // Twitch chat !news as notifications in game
     { WIDGETS_END },
 };
 
@@ -622,7 +624,8 @@ static uint64_t window_options_page_enabled_widgets[] = {
     (1 << WIDX_FOLLOWER_PEEP_TRACKING_CHECKBOX) |
     (1 << WIDX_CHAT_PEEP_NAMES_CHECKBOX) |
     (1 << WIDX_CHAT_PEEP_TRACKING_CHECKBOX) |
-    (1 << WIDX_NEWS_CHECKBOX)
+    (1 << WIDX_NEWS_CHECKBOX) |
+    (1 << WIDX_EXPORTING_PARK_INFO_CHECKBOX)
 };
 // clang-format on
 
@@ -1013,6 +1016,11 @@ static void window_options_mouseup(rct_window* w, rct_widgetindex widgetIndex)
                     break;
                 case WIDX_NEWS_CHECKBOX:
                     gConfigTwitch.enable_news ^= 1;
+                    config_save_default();
+                    w->Invalidate();
+                    break;
+                case WIDX_EXPORTING_PARK_INFO_CHECKBOX:
+                    gConfigTwitch.enable_exporting_park_info ^= 1;
                     config_save_default();
                     w->Invalidate();
                     break;
@@ -1942,6 +1950,7 @@ static void window_options_invalidate(rct_window* w)
             widget_set_checkbox_value(w, WIDX_CHAT_PEEP_NAMES_CHECKBOX, gConfigTwitch.enable_chat_peep_names);
             widget_set_checkbox_value(w, WIDX_CHAT_PEEP_TRACKING_CHECKBOX, gConfigTwitch.enable_chat_peep_tracking);
             widget_set_checkbox_value(w, WIDX_NEWS_CHECKBOX, gConfigTwitch.enable_news);
+            widget_set_checkbox_value(w, WIDX_EXPORTING_PARK_INFO_CHECKBOX, gConfigTwitch.enable_exporting_park_info);
             break;
     }
 

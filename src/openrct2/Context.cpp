@@ -994,7 +994,6 @@ namespace OpenRCT2
             }
 #endif
 
-            Twitch::Update();
             chat_update();
             _stdInOutConsole.ProcessEvalQueue();
             _uiContext->Update();
@@ -1018,6 +1017,7 @@ namespace OpenRCT2
                     DIRID::SEQUENCE,
                     DIRID::REPLAY,
                     DIRID::LOG_DESYNCS,
+                    DIRID::EXPORTED_PARK_INFO,
                 });
         }
 

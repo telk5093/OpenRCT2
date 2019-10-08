@@ -222,6 +222,7 @@ const char * PlatformEnvironment::DirectoryNamesOpenRCT2[] =
     "heightmap",            // HEIGHTMAP
     "replay",               // REPLAY
     "desyncs",              // DESYNCS
+    "exported",             // EXPORTED_PARK_INFO
 };
 
 const char * PlatformEnvironment::FileNames[] =

@@ -17,6 +17,7 @@ extern bool gTwitchEnable;
 namespace Twitch
 {
     void Update();
+    void ExportParkInfo();
 }
 
 #endif

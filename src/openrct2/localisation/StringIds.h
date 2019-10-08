@@ -3968,6 +3968,9 @@ enum
     STR_STRING_STRINGID = 6329,
     STR_DOWNLOADING_OBJECTS_FROM = 6330,
 
+    STR_TWITCH_EXPORTING_PARK_INFO = 6331,
+    STR_TWITCH_EXPORTING_PARK_INFO_TIP = 6332,
+
     // Have to include resource strings (from scenarios and objects) for the time being now that language is partially working
     STR_COUNT = 32768
 };

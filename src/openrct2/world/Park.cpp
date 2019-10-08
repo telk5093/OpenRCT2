@@ -27,6 +27,7 @@
 #include "../management/NewsItem.h"
 #include "../management/Research.h"
 #include "../network/network.h"
+#include "../network/Twitch.h"
 #include "../peep/Peep.h"
 #include "../peep/Staff.h"
 #include "../ride/Ride.h"
@@ -319,6 +320,8 @@ void Park::Update(const Date& date)
         window_invalidate_by_class(WC_FINANCES);
         auto intent = Intent(INTENT_ACTION_UPDATE_PARK_RATING);
         context_broadcast_intent(&intent);
+
+        Twitch::ExportParkInfo();
     }
     // Every ~102 seconds
     if (gCurrentTicks % 4096 == 0)

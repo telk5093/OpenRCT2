@@ -481,6 +481,7 @@ namespace Config
             model->enable_chat_peep_names = reader->GetBoolean("chat_peep_names", true);
             model->enable_chat_peep_tracking = reader->GetBoolean("chat_peep_tracking", true);
             model->enable_news = reader->GetBoolean("news", false);
+            model->enable_exporting_park_info = reader->GetBoolean("exporting_park_info", false);
         }
     }
 
@@ -495,6 +496,7 @@ namespace Config
         writer->WriteBoolean("chat_peep_names", model->enable_chat_peep_names);
         writer->WriteBoolean("chat_peep_tracking", model->enable_chat_peep_tracking);
         writer->WriteBoolean("news", model->enable_news);
+        writer->WriteBoolean("exporting_park_info", model->enable_exporting_park_info);
     }
 
     static void ReadFont(IIniReader* reader)

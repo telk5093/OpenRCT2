@@ -27,18 +27,23 @@ namespace Twitch
 #    include "../Context.h"
 #    include "../Game.h"
 #    include "../OpenRCT2.h"
+#    include "../PlatformEnvironment.h"
 #    include "../actions/GuestSetFlagsAction.hpp"
 #    include "../config/Config.h"
+#    include "../core/FileStream.hpp"
 #    include "../core/Json.hpp"
+#    include "../core/Path.hpp"
 #    include "../core/String.hpp"
 #    include "../drawing/Drawing.h"
 #    include "../interface/InteractiveConsole.h"
 #    include "../localisation/Localisation.h"
+#    include "../management/Finance.h"
 #    include "../management/NewsItem.h"
 #    include "../peep/Peep.h"
 #    include "../platform/platform.h"
 #    include "../util/Util.h"
 #    include "../world/Sprite.h"
+#    include "../world/park.h"
 #    include "Http.h"
 #    include "Twitch.h"
 
@@ -133,6 +138,50 @@ namespace Twitch
         if (String::IsNullOrEmpty(gConfigTwitch.channel))
             return false;
         return true;
+    }
+
+    static void ExportParkInfoIntoTextfile(std::string file_name, double export_data, const char* custom_format="%d")
+    {
+        utf8 buffer[256];
+        auto _env = OpenRCT2::CreatePlatformEnvironment();
+
+        auto fs = FileStream(Path::Combine(_env->GetDirectoryPath(DIRBASE::USER, DIRID::EXPORTED_PARK_INFO), file_name), FILE_MODE_WRITE);
+        sprintf(buffer, custom_format, export_data);
+        fs.Write(buffer, strlen(buffer));
+    }
+
+    void ExportParkInfo()
+    {
+        // Export files
+        if (IsTwitchEnabled() && gConfigTwitch.enable_exporting_park_info)
+        {
+            // Park value
+            ExportParkInfoIntoTextfile("park_value.txt", gParkValue / 10);
+
+            // Company Value
+            ExportParkInfoIntoTextfile("company_value.txt", gCompanyValue / 10);
+
+            // Park rating
+            ExportParkInfoIntoTextfile("park_rating.txt", gParkRating);
+
+            // Guests in park
+            ExportParkInfoIntoTextfile("guests_in_park.txt", gNumGuestsInPark);
+
+            // Current cash
+            ExportParkInfoIntoTextfile("cash.txt", gCash / 10, "%.2f");
+
+            // Profit of current month from rides
+            money32 thisMonthRideIncome = gExpenditureTable[0][RCT_EXPENDITURE_TYPE_PARK_RIDE_TICKETS];
+            ExportParkInfoIntoTextfile("profit_from_rides.txt", thisMonthRideIncome / 10, "%f");
+
+            // Profit of current month from shops and stalls
+            money32* thisMonthExpenditure = gExpenditureTable[0];
+            int32_t thisMonthShopProfit = thisMonthExpenditure[RCT_EXPENDITURE_TYPE_SHOP_SHOP_SALES]
+                + thisMonthExpenditure[RCT_EXPENDITURE_TYPE_SHOP_STOCK]
+                + thisMonthExpenditure[RCT_EXPENDITURE_TYPE_FOODDRINK_SALES]
+                + thisMonthExpenditure[RCT_EXPENDITURE_TYPE_FOODDRINK_STOCK];
+            ExportParkInfoIntoTextfile("profit_from_shops.txt", thisMonthShopProfit / 10, "%.2f");
+        }
     }
 
     void Update()

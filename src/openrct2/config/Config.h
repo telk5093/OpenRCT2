@@ -134,6 +134,7 @@ struct TwitchConfiguration
     bool enable_chat_peep_names;
     bool enable_chat_peep_tracking;
     bool enable_news;
+    bool enable_exporting_park_info;
 };
 
 struct NetworkConfiguration
